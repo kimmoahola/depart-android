@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item android:id="@+id/favorites" android:title="@string/favorites" android:icon="@drawable/favorites" android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/myLocationId" android:title="@string/location" android:icon="@drawable/device_access_location_found" android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/bulletins" android:title="@string/bulletins" android:icon="@drawable/action_about" android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/refresh" android:title="@string/refreshAll" android:icon="@drawable/navigation_refresh" android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/satellite" android:title="@string/satellite" android:icon="@drawable/location_map" android:showAsAction="ifRoom"></item>
+    <item android:id="@+id/settings" android:title="@string/settings" android:icon="@drawable/action_settings"></item>
+    <item android:id="@+id/about" android:title="@string/aboutHelp" android:icon="@drawable/action_help"></item>
+</menu>

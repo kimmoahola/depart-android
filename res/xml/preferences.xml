@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <ListPreference
+        android:defaultValue="@string/updateSpeedDefaultValue"
+        android:entries="@array/updateSpeedNames"
+        android:entryValues="@array/updateSpeedValues"
+        android:key="updateSpeedPref"
+        android:summary="@string/updateSpeedDefaultValue"
+        android:title="@string/updateSpeedTitle" />
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="useGPSPref"
+        android:title="@string/useGPSTitle" />
+
+    <ListPreference
+        android:defaultValue="@string/rssLangDefaultValue"
+        android:entries="@array/rssLangNames"
+        android:entryValues="@array/rssLangValues"
+        android:key="rssLangPref"
+        android:summary="@string/rssLangDefaultValue"
+        android:title="@string/rssLangTitle" />
+
+</PreferenceScreen>

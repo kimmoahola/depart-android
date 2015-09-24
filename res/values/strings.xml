@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- release -->
+   	<!-- <string name="mapApiKey">google_maps_release_api_key_here</string> -->
+
+   	<!-- debug -->
+    <string name="mapApiKey">google_maps_debug_api_key_here</string>
+
+    <string name="app_name">Depart</string>
+
+    <string name="aboutUrl">file:///android_asset/about_en.html</string>
+
+
+    <!-- Settings -->
+    
+    <string name="updateSpeedTitle">Vehicle update speed</string>
+    <string-array name="updateSpeedNames">
+        <item>Fast</item>
+        <item>Medium</item>
+        <item>Slow</item>
+    </string-array>
+    <string-array name="updateSpeedValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="updateSpeedDefaultValue">1</string>
+
+    <string name="rssLangTitle">Traffic bulletins language</string>
+    <string-array name="rssLangNames">
+        <item>System language</item>
+        <item>Finnish</item>
+        <item>English</item>
+    </string-array>
+    <string-array name="rssLangValues">
+        <item>default</item>
+        <item>fi</item>
+        <item>en</item>
+    </string-array>
+    <string name="rssLangDefaultValue">default</string>
+    
+    <string name="useGPSTitle">Use GPS</string>
+    
+    
+    <!-- Map -->
+    
+    <string name="map">Map</string>
+    <string name="location">My location</string>
+    <string name="favorites">Favorites</string>
+    <string name="bulletins">Traffic bulletins</string>
+    <string name="satellite">Satellite</string>
+    <string name="satelliteOff">Map</string>
+    <string name="refreshAll">Refresh all</string>
+    <string name="refresh">Refresh</string>
+    <string name="aboutHelp">About</string>
+    <string name="settings">Settings</string>
+    <string name="myLocationNA">No location acquired</string>
+    <string name="openTimetables">Open timetable</string>
+    <string name="tripPlanner">Trip planner</string>
+    <string name="filter">Filter</string>
+    
+    
+    <!-- Favorites -->
+
+    <string name="star">Add to favorites</string>
+    <string name="starFill">Remove from favorites</string>
+    <string name="favorited">Added to favorites</string>
+    <string name="unfavorited">Removed from favorites</string>
+    <string name="noFavorites">Your list of favorite stops is empty. Click a yellow circle on the map to open stop timetables. To add the stop to the favorites for quick access click the star icon.</string>
+    <string name="delete">Delete</string>
+    <string name="rename">Rename</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
+    
+    
+    <!-- Stop view -->
+
+    <string name="openInBrowser">Open in browser</string>
+    <string name="zoomTo">Focus map</string>
+    <string name="departing">Departing</string>
+    <string name="arriving">Arriving</string>
+    
+    
+    <!-- Bulletins -->
+    
+    <string name="bulletinUpdating">Fetching..</string>
+    <string name="bulletinsLoading">Loading traffic bulletins..</string>
+    <string name="bulletinsVr">VR information</string>
+    <string name="bulletinsHsl">HSL information</string>
+    <string name="bulletinsTre">Tampereen joukkoliikenteen tiedotteet (only finnish)</string>
+    <string name="bulletinsTurku">Turun liikenteen tiedotteet (only finnish)</string>
+    <string name="bulletinsLiik">Liikenneviraston tiedotteet (only finnish)</string>
+    
+    
+    <!-- Misc -->
+
+    <string name="train">Train</string>
+    <string name="bus">Bus</string>
+    
+    <string name="justnow">Just now</string>
+    <string name="ago">ago</string>
+    <string name="minute">a minute</string>
+    <string name="minutes">minutes</string>
+    <string name="hour">an hour</string>
+    <string name="hours">hours</string>
+    <string name="day">a day</string>
+    <string name="days">days</string>
+    <string name="month">month</string>
+    <string name="months">months</string>
+    
+    <string name="add">Add</string>
+    
+    
+    <!-- Shortcut -->
+    <string name="shortcutText">Depart Stop</string>
+
+</resources>

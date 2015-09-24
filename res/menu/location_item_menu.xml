@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+  <item android:id="@+id/star" android:title="@string/star" android:icon="@drawable/star" android:showAsAction="ifRoom"></item>
+  <item android:id="@+id/refresh" android:title="@string/refresh" android:icon="@drawable/navigation_refresh" android:showAsAction="ifRoom"></item>
+  <item android:id="@+id/external" android:title="@string/openInBrowser" android:icon="@drawable/location_web_site" android:showAsAction="ifRoom"></item>
+  <item android:id="@+id/zoomTo" android:title="@string/zoomTo" android:icon="@drawable/location_map" android:showAsAction="ifRoom"></item>
+</menu>

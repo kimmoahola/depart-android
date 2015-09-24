@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/FrameLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <com.sekakuoro.depart.views.MyMapView
+        android:id="@+id/mapview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:apiKey="@string/mapApiKey"
+        android:clickable="true" />
+
+    <RelativeLayout
+        android:id="@+id/leftHolder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+	    <ProgressBar
+	        android:id="@+id/progressBar"
+	        style="@android:style/Widget.ProgressBar.Horizontal"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_marginTop="-7dip"
+	        android:indeterminate="true"
+	        android:visibility="gone" />
+
+    </RelativeLayout>
+
+</FrameLayout>

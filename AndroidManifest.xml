@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.sekakuoro.depart"
+    android:installLocation="auto"
+    android:versionCode="14"
+    android:versionName="1.6" >
+
+    <uses-sdk
+        android:minSdkVersion="14"
+        android:targetSdkVersion="16" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.network"
+        android:required="false" />
+	<uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true"/>
+
+    <application
+        android:name=".MyApp"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:windowBackground="@null"
+        android:allowBackup="false" >
+        <uses-library android:name="com.google.android.maps" />
+        <activity
+            android:name=".activities.MyMapActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.MyPreferenceActivity" >
+        </activity>
+        <activity android:name=".activities.AboutActivity" >
+        </activity>
+        <activity android:name=".activities.BulletinsActivity" >
+        </activity>
+        <activity android:name=".activities.BulletinsAreaActivity" >
+        </activity>
+        <activity android:name=".activities.BulletinsDetailsActivity" >
+        </activity>
+        <activity android:name=".activities.StandardDepartureActivity" >
+        </activity>
+        <activity android:name=".activities.VrDepartureActivity" >
+        </activity>
+        <activity android:name=".activities.FavoritesActivity" >
+        </activity>
+    </application>
+
+</manifest>

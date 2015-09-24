@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+
+
+    <string name="aboutUrl">file:///android_asset/about_fi.html</string>
+    
+    
+    <!-- Settings -->
+
+    <string name="updateSpeedTitle">Päivitysnopeus</string>
+    <string-array name="updateSpeedNames">
+        <item>Nopea</item>
+        <item>Kohtalainen</item>
+        <item>Hidas</item>
+    </string-array>
+    
+    
+    
+    
+    
+    
+
+    <string name="rssLangTitle">Liikennetiedotteiden kieli</string>
+    <string-array name="rssLangNames">
+        <item>Järjestelmän kieli</item>
+        <item>Suomi</item>
+        <item>Englanti</item>
+    </string-array>
+    
+    
+    
+    
+    
+    
+    
+    <string name="useGPSTitle">Käytä GPS:ää</string>
+    
+    
+    <!-- Map -->
+    
+    <string name="map">Kartta</string>
+    <string name="location">Sijainti</string>
+    <string name="favorites">Suosikit</string>
+    <string name="bulletins">Liikennetiedotteet</string>
+    <string name="satellite">Satelliitti</string>
+    <string name="satelliteOff">Kartta</string>
+    <string name="refreshAll">Päivitä kaikki</string>
+    <string name="refresh">Päivitä</string>
+    <string name="aboutHelp">Tietoja</string>
+    <string name="settings">Asetukset</string>
+    <string name="myLocationNA">Sijaintia ei saatavilla</string>
+    <string name="openTimetables">Avaa aikataulu</string>
+    <string name="tripPlanner">Reittiopas</string>
+    <string name="filter">Suodata</string>
+    
+    
+    <!-- Favorites -->
+    
+    <string name="star">Aseta suosikiksi</string>
+    <string name="starFill">Poista suosikeista</string>
+    <string name="favorited">Lisätty suosikkeihin</string>
+    <string name="unfavorited">Poistettu suosikeista</string>
+    <string name="noFavorites">Listasi suosikkipysäkeistä on tyhjä. Paina kartalla näkyvää keltaista ympyrää avataksesi pysäkin aikataulut. Paina tähti-kuvaketta pysäkkisivulla lisätäksesi pysäkki suosikkeihin.</string>
+    <string name="delete">Poista</string>
+    <string name="rename">Uudelleennimeä</string>
+    <string name="reset">Resetoi</string>
+    <string name="cancel">Peruuta</string>
+    
+    
+    <!-- Stop view -->
+
+    <string name="openInBrowser">Avaa selaimessa</string>
+    <string name="zoomTo">Kohdista kartta</string>
+    <string name="departing">Lähtevät</string>
+    <string name="arriving">Saapuvat</string>
+    
+    
+    <!-- Bulletins -->
+    
+    <string name="bulletinUpdating">Haetaan..</string>
+    <string name="bulletinsLoading">Ladataan liikennetiedotteita..</string>
+    <string name="bulletinsVr">VR tiedotteet</string>
+    <string name="bulletinsHsl">HSL tiedotteet</string>
+    <string name="bulletinsTre">Tampereen joukkoliikenteen tiedotteet</string>
+    <string name="bulletinsTurku">Turun liikenteen tiedotteet</string>
+    <string name="bulletinsLiik">Liikenneviraston tiedotteet</string>
+    
+    
+    <!-- Misc -->
+    
+    <string name="train">Juna</string>
+    <string name="bus">Bussi</string>
+
+    <string name="justnow">Juuri nyt</string>
+    <string name="ago">sitten</string>
+    <string name="minute">minuutti</string>
+    <string name="minutes">minuuttia</string>
+    <string name="hour">tunti</string>
+    <string name="hours">tuntia</string>
+    <string name="day">päivä</string>
+    <string name="days">päivää</string>
+    <string name="month">kuukausi</string>
+    <string name="months">kuukautta</string>
+
+    <string name="add">Lisää</string>
+
+    
+    <!-- Shortcut -->
+    <string name="shortcutText">Depart Pysäkki</string>
+
+</resources>
