@@ -1,12 +1,12 @@
 package com.sekakuoro.depart.loaders;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
@@ -18,14 +18,8 @@ import com.sekakuoro.depart.TimetableItem;
 public class TurkuTimetableLoader extends AsyncTaskLoader<ArrayList<TimetableItem>> {
 
   private LocationItem item = null;
-  private Map<String, TimetableItem> timetableItems = new HashMap<String, TimetableItem>(); // <line,
-                                                                                            // item>
-
-  private static final Pattern p = Pattern.compile("<tr [^>]*>(.*?)</tr>", Pattern.DOTALL);
-  private static final Pattern pLine = Pattern.compile("<td .*?linecol.*?>(.*?)</td>");
-  private static final Pattern pDest = Pattern.compile("<td .*?destcol.*?>(.*?)</td>");
-  private static final Pattern pTimes = Pattern.compile("<td .*?timecol.*?>(.*?)</td>");
-  private static final Pattern pToBeSure = Pattern.compile("(<.*?>)");
+  private Map<String, TimetableItem> timetableItems = new LinkedHashMap<String, TimetableItem>(); // line,
+                                                                                                  // item
 
   public TurkuTimetableLoader(Context context, LocationItem item) {
     super(context);
@@ -42,42 +36,43 @@ public class TurkuTimetableLoader extends AsyncTaskLoader<ArrayList<TimetableIte
 
   @Override
   public ArrayList<TimetableItem> loadInBackground() {
+    timetableItems.clear();
+
     if (item == null)
       return new ArrayList<TimetableItem>();
 
     final String payload = MyApp.GetHttpFile(item.getTimetableUri().toString(), item);
 
-    timetableItems.clear();
+    try {
+      final JSONObject jsonObject = new JSONObject(payload);
 
-    final Matcher m = p.matcher(payload);
-    while (m.find()) {
-      final String matched = m.group(1);
+      {
+        final JSONArray departuresJsonArray = jsonObject.getJSONArray("departures");
+        final int departuresLen = departuresJsonArray.length();
+        for (int j = 0; j < departuresLen; ++j) {
+          final JSONObject jsonObjectDeparture = departuresJsonArray.getJSONObject(j);
+          final String route = jsonObjectDeparture.getString("route");
+          String time = jsonObjectDeparture.getString("strTime");
 
-      final Matcher mLine = pLine.matcher(matched);
-      if (mLine.find()) {
-        final String line = mLine.group(1);
+          if (time.equals("0")) {
+            time = new String("0 min");
+          }
 
-        TimetableItem titem = timetableItems.get(line);
-        if (titem == null) {
-          titem = new TimetableItem();
-          timetableItems.put(line, titem);
-          titem.line = line;
+          final TimetableItem existingRoute = timetableItems.get(route);
+          if (existingRoute != null)
+            existingRoute.times.add(time);
+          else {
+            TimetableItem titem = new TimetableItem();
+            titem.line = route;
+            titem.destination = jsonObjectDeparture.getString("destination");
+            titem.times.add(time);
 
-          final Matcher mDest = pDest.matcher(matched);
-          if (mDest.find())
-            titem.destination = mDest.group(1);
+            timetableItems.put(route, titem);
+          }
 
-          // Just in case
-          titem.destination = StringEscapeUtils.unescapeHtml4(pToBeSure.matcher(titem.destination).replaceAll(""));
-          titem.line = pToBeSure.matcher(titem.line).replaceAll("");
-          titem.title = titem.line;
-          titem.id = "";
         }
-
-        final Matcher mTimes = pTimes.matcher(matched);
-        if (mTimes.find())
-          titem.addTime(mTimes.group(1));
       }
+    } catch (JSONException e) {
     }
 
     return new ArrayList<TimetableItem>(timetableItems.values());

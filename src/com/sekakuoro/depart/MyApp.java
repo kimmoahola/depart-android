@@ -40,6 +40,7 @@ import com.sekakuoro.depart.stops.TurkuStops;
 import com.sekakuoro.depart.stops.VrStops;
 import com.sekakuoro.depart.tracker.Hsl;
 import com.sekakuoro.depart.tracker.Tre;
+import com.sekakuoro.depart.tracker.Turku;
 import com.sekakuoro.depart.tracker.Vr;
 
 public class MyApp extends Application {
@@ -122,6 +123,7 @@ public class MyApp extends Application {
     uc.add(new Tre());
     uc.add(new Hsl());
     uc.add(new Vr());
+    uc.add(new Turku());
   }
 
   public static void initBulletinFeeds() {
@@ -290,8 +292,7 @@ public class MyApp extends Application {
       request.addHeader("Accept", "application/json");
       final HttpResponse response = new DefaultHttpClient(httpParameters).execute(request);
       if (response.getStatusLine().getStatusCode() == 200) {
-        InputStream inputStream;
-        inputStream = AndroidHttpClient.getUngzippedContent(response.getEntity());
+        InputStream inputStream = AndroidHttpClient.getUngzippedContent(response.getEntity());
         String charSet = EntityUtils.getContentCharSet(response.getEntity());
         if (charSet == null)
           charSet = "utf-8";

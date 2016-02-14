@@ -16,7 +16,7 @@ public class LocationItemCollection {
   public final Lock updatingLock = new ReentrantLock();
 
   public enum AreaTypeIdEnum {
-    NONE, Tre, Vr, Hsl, Oulu, Turku, Lahti, Bart, Jyvaskyla
+    NONE, Tre, Vr, Hsl, Oulu, Turku, Jyvaskyla
   }
 
   public enum TypeIdEnum {

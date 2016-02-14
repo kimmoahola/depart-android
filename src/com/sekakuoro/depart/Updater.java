@@ -148,7 +148,11 @@ public abstract class Updater {
 
   // Loads stuff from the net. Overwritten in StopUpdater.
   protected String getPayload() {
-    return MyApp.GetHttpFile(url, itemcoll);
+    return MyApp.GetHttpFile(getUrl(), itemcoll);
+  }
+
+  protected String getUrl() {
+    return url;
   }
 
   enum States {

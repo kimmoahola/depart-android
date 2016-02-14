@@ -34,7 +34,7 @@ public class DepartureSelector {
       return new TreTimetableLoader(context, item);
     else if (item.areaTypeId == AreaTypeIdEnum.Vr)
       return new VrTimetableLoader(context, item);
-    else if (item.areaTypeId == AreaTypeIdEnum.Turku || item.areaTypeId == AreaTypeIdEnum.Lahti)
+    else if (item.areaTypeId == AreaTypeIdEnum.Turku)
       return new TurkuTimetableLoader(context, item);
     else if (item.areaTypeId == AreaTypeIdEnum.Oulu)
       return new OuluTimetableLoader(context, item);

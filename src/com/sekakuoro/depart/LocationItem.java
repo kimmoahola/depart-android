@@ -138,7 +138,8 @@ public class LocationItem {
         uri = Uri.parse("http://188.117.35.14/TrainRSS/TrainService.svc/StationInfo?station=" + id);
       break;
       case Turku:
-        uri = Uri.parse("http://turku.seasam.com/nettinaytto/web?view=mobile&command=quicksearch&stopid=" + id);
+        uri = Uri.parse("http://aikataulut.foli.fi/webapi/departures/bystop/" + id
+            + "?maxInfos=10&key=dbf4284a9ca3a9858f3ec3ef37e26cd4&_=" + System.currentTimeMillis());
       break;
       case Oulu:
         long start_time = System.currentTimeMillis() / 1000;
@@ -174,10 +175,8 @@ public class LocationItem {
             + "&Submit=Hae&command=quicksearch&view=mobile");
       else if (areaTypeId == AreaTypeIdEnum.Oulu)
         uri = Uri.parse("http://www.oulunliikenne.fi/#/joukkoliikenne/aikataulut/pysakki/" + id);
-      else if (areaTypeId == AreaTypeIdEnum.Lahti)
-        uri = Uri.parse("http://lahti.seasam.com/nettinaytto/web?view=mobile&command=quicksearch&stopid=" + id);
       else if (areaTypeId == AreaTypeIdEnum.Turku)
-        uri = Uri.parse("http://turku.seasam.com/nettinaytto/web?view=mobile&command=quicksearch&stopid=" + id);
+        uri = Uri.parse("http://aikataulut.foli.fi/onlineinfomobile/index.fi.html#departures?stopId=" + id);
       else if (areaTypeId == AreaTypeIdEnum.Jyvaskyla) {
         final String encodedTitle = Uri.encode(title);
         uri = Uri.parse("http://info.jyvaskylanliikenne.fi/?ua=select&v=pda&key=" + encodedTitle + "&lcn=" + id + "%7C"
@@ -189,7 +188,6 @@ public class LocationItem {
         uri = Uri.parse("http://aikataulut.tampere.fi/?line=" + lineNumber + "&mobile=1&page=lineTimetable");
       } else if (areaTypeId == AreaTypeIdEnum.Vr) {
         uri = Uri.parse("https://shop.vr.fi/vrmobiili/ParseLocationDataForTrain.do?trainQuery=" + id);
-        // }
       } else if (areaTypeId == AreaTypeIdEnum.Hsl) {
         if (typeId == TypeIdEnum.Metro) {
           if (title.equals("M"))
@@ -198,6 +196,8 @@ public class LocationItem {
             uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/hMetro_Vuosaari.html");
         } else
           uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/haku/?key=" + title);
+      } else if (areaTypeId == AreaTypeIdEnum.Turku) {
+        uri = Uri.parse("http://www.foli.fi/fi/node/1581/");
       }
     }
 
