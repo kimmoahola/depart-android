@@ -18,7 +18,7 @@ import com.sekakuoro.depart.TimetableItem;
 public class TurkuTimetableLoader extends AsyncTaskLoader<ArrayList<TimetableItem>> {
 
   private LocationItem item = null;
-  private Map<String, TimetableItem> timetableItems = new LinkedHashMap<String, TimetableItem>(); // line,
+  private Map<String, TimetableItem> timetableItems = new LinkedHashMap<String, TimetableItem>(); // route_and_destination,
                                                                                                   // item
 
   public TurkuTimetableLoader(Context context, LocationItem item) {
@@ -52,22 +52,27 @@ public class TurkuTimetableLoader extends AsyncTaskLoader<ArrayList<TimetableIte
         for (int j = 0; j < departuresLen; ++j) {
           final JSONObject jsonObjectDeparture = departuresJsonArray.getJSONObject(j);
           final String route = jsonObjectDeparture.getString("route");
+          final String destination = jsonObjectDeparture.getString("destination");
+          final String route_and_destination = route + destination;
           String time = jsonObjectDeparture.getString("strTime");
 
           if (time.equals("0")) {
             time = new String("0 min");
           }
 
-          final TimetableItem existingRoute = timetableItems.get(route);
+          final TimetableItem existingRoute = timetableItems.get(route_and_destination);
           if (existingRoute != null)
             existingRoute.times.add(time);
           else {
             TimetableItem titem = new TimetableItem();
             titem.line = route;
-            titem.destination = jsonObjectDeparture.getString("destination");
+            titem.destination = destination;
+            if (titem.destination.equals("null")) {
+              titem.destination = "";
+            }
             titem.times.add(time);
 
-            timetableItems.put(route, titem);
+            timetableItems.put(route_and_destination, titem);
           }
 
         }
