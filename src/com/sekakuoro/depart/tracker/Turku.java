@@ -73,7 +73,7 @@ public class Turku extends Updater {
             continue;
 
           LocationItem item = new LocationItem(itemcoll);
-          item.setId(Integer.toString(i));
+          item.setId("turku_bus_" + Integer.toString(i));
           itemcoll.add(item);
 
           item.setTitle(title);
