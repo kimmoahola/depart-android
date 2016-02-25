@@ -110,6 +110,8 @@ public class LocationItem {
       areaTypeName = MyApp.getResourcesWrapper().getString(R.string.bus);
     else if (areaTypeId == AreaTypeIdEnum.Hsl && !isStop())
       areaTypeName = areaTypeId.toString().toUpperCase();
+    else if (areaTypeId == AreaTypeIdEnum.Turku && !isStop())
+      areaTypeName = MyApp.getResourcesWrapper().getString(R.string.bus);
 
     if (areaTypeName.length() > 0)
       areaTypeName += ": ";
