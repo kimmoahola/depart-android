@@ -15,7 +15,6 @@ import com.sekakuoro.depart.activities.VrDepartureActivity;
 import com.sekakuoro.depart.loaders.HslTimetableLoader;
 import com.sekakuoro.depart.loaders.JyvaskylaTimetableLoader;
 import com.sekakuoro.depart.loaders.NullTimetableLoader;
-import com.sekakuoro.depart.loaders.OuluTimetableLoader;
 import com.sekakuoro.depart.loaders.TreTimetableLoader;
 import com.sekakuoro.depart.loaders.TurkuTimetableLoader;
 import com.sekakuoro.depart.loaders.VrTimetableLoader;
@@ -36,8 +35,6 @@ public class DepartureSelector {
       return new VrTimetableLoader(context, item);
     else if (item.areaTypeId == AreaTypeIdEnum.Turku)
       return new TurkuTimetableLoader(context, item);
-    else if (item.areaTypeId == AreaTypeIdEnum.Oulu)
-      return new OuluTimetableLoader(context, item);
     else if (item.areaTypeId == AreaTypeIdEnum.Jyvaskyla)
       return new JyvaskylaTimetableLoader(context, item);
     else {

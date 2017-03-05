@@ -34,7 +34,6 @@ import com.sekakuoro.depart.helpers.Utils;
 import com.sekakuoro.depart.mapui.MyLocationOverlay;
 import com.sekakuoro.depart.stops.HslStops;
 import com.sekakuoro.depart.stops.JyStops;
-import com.sekakuoro.depart.stops.OuluStops;
 import com.sekakuoro.depart.stops.TreStops;
 import com.sekakuoro.depart.stops.TurkuStops;
 import com.sekakuoro.depart.stops.VrStops;
@@ -115,7 +114,6 @@ public class MyApp extends Application {
 
     uc.add(new TreStops());
     uc.add(new HslStops());
-    uc.add(new OuluStops());
     uc.add(new TurkuStops());
     uc.add(new JyStops());
     uc.add(new VrStops());

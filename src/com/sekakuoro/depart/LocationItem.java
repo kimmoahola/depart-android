@@ -134,7 +134,9 @@ public class LocationItem {
         uri = Uri.parse("http://api.reittiopas.fi/hsl/prod/?request=stop&user=departhsl&pass=811f4d37&code=" + id);
       break;
       case Tre:
-        uri = Uri.parse("http://lissu.tampere.fi/ajax_servers/getStopBox.php?stop=" + id + "&mobile=1");
+        uri = Uri
+            .parse("http://api.publictransport.tampere.fi/prod/?request=stop&dep_limit=20&time_limit=360&format=json&user=departtre&pass=3f85a57c&code="
+                + id);
       break;
       case Vr:
         uri = Uri.parse("http://188.117.35.14/TrainRSS/TrainService.svc/StationInfo?station=" + id);
@@ -142,13 +144,6 @@ public class LocationItem {
       case Turku:
         uri = Uri.parse("http://aikataulut.foli.fi/webapi/departures/bystop/" + id
             + "?maxInfos=10&key=dbf4284a9ca3a9858f3ec3ef37e26cd4&_=" + System.currentTimeMillis());
-      break;
-      case Oulu:
-        long start_time = System.currentTimeMillis() / 1000;
-        long end_time = start_time + 24 * 3600; // add 24 hours
-        uri = Uri
-            .parse("http://it2.infotripla.fi/otp-rest-servlet/ws/routers/default/transit/stopTimesForStop?agency=&endTime="
-                + end_time + "&extended=true&id=" + id + "&references=true&startTime=" + start_time);
       break;
       case Jyvaskyla:
         final String encodedTitle = Uri.encode(title);
@@ -175,8 +170,6 @@ public class LocationItem {
       } else if (areaTypeId == AreaTypeIdEnum.Hsl)
         uri = Uri.parse("http://www.omatlahdot.fi/omatlahdot/web?stopid=" + id
             + "&Submit=Hae&command=quicksearch&view=mobile");
-      else if (areaTypeId == AreaTypeIdEnum.Oulu)
-        uri = Uri.parse("http://www.oulunliikenne.fi/#/joukkoliikenne/aikataulut/pysakki/" + id);
       else if (areaTypeId == AreaTypeIdEnum.Turku)
         uri = Uri.parse("http://aikataulut.foli.fi/onlineinfomobile/index.fi.html#departures?stopId=" + id);
       else if (areaTypeId == AreaTypeIdEnum.Jyvaskyla) {

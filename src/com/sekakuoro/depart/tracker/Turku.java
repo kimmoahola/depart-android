@@ -65,7 +65,7 @@ public class Turku extends Updater {
         try {
           final JSONArray arr = jsonArray.getJSONArray(i);
 
-          final String title = arr.getString(0).replace("Lin", "").trim();
+          final String title = arr.getString(0).replace("Linja", "").replace("Lin", "").trim();
           final int lat = (int) arr.getInt(2);
           final int lng = (int) arr.getInt(1);
 
