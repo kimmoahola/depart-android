@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Typeface;
-import android.util.FloatMath;
 
 import com.sekakuoro.depart.LocationItem;
 import com.sekakuoro.depart.LocationItemCollection;
@@ -45,16 +44,16 @@ public class VehicleBitmapFactory {
     if (item.bearing > 0) {
       bearing = item.bearing - 1;
       bearingLeft = (float) (Math.toRadians(bearing) - bearingArrowSideRad - HALF_PI);
-      bearingLeftX = FloatMath.cos(bearingLeft) * (distanceInner + 1);
-      bearingLeftY = FloatMath.sin(bearingLeft) * (distanceInner + 1);
+      bearingLeftX = (float) (Math.cos(bearingLeft) * (distanceInner + 1));
+      bearingLeftY = (float) (Math.sin(bearingLeft) * (distanceInner + 1));
       bearingRight = (float) (Math.toRadians(bearing) + bearingArrowSideRad - HALF_PI);
-      bearingRightX = FloatMath.cos(bearingRight) * (distanceInner + 1);
-      bearingRightY = FloatMath.sin(bearingRight) * (distanceInner + 1);
+      bearingRightX = (float) (Math.cos(bearingRight) * (distanceInner + 1));
+      bearingRightY = (float) (Math.sin(bearingRight) * (distanceInner + 1));
       bearingCenter = (float) (Math.toRadians(bearing) - HALF_PI);
-      bearingCenterX = FloatMath.cos(bearingCenter) * distanceBearing;
-      bearingCenterY = FloatMath.sin(bearingCenter) * distanceBearing;
-      bearingCenterShortX = FloatMath.cos(bearingCenter) * distanceInner;
-      bearingCenterShortY = FloatMath.sin(bearingCenter) * distanceInner;
+      bearingCenterX = (float) (Math.cos(bearingCenter) * distanceBearing);
+      bearingCenterY = (float) (Math.sin(bearingCenter) * distanceBearing);
+      bearingCenterShortX = (float) (Math.cos(bearingCenter) * distanceInner);
+      bearingCenterShortY = (float) (Math.sin(bearingCenter) * distanceInner);
     }
 
     synchronized (c) {
@@ -89,21 +88,30 @@ public class VehicleBitmapFactory {
       c.drawCircle(0, 0, distanceInner, circleOuterPaint);
 
       // Text
-      final String title = item.getTitle();
+
+      String title = item.getTitle();
+
+      if (title.length() > 4) {
+        title = title.replaceAll("(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", " ");
+      }
+
       final int spacePos = title.indexOf(' ');
       if (title.length() > 3 && spacePos > 0) {
         // Two row text
 
         // First row
-        c.drawText(title.substring(0, spacePos), 0, textYPos - textSmallPaint.getTextSize() / 2.0f, textSmallPaint);
+        c.drawText(title.substring(0, spacePos), 0, textYPos - textVerySmallPaint.getTextSize() / 2.0f, textVerySmallPaint);
 
         // Second row
-        c.drawText(title.substring(spacePos + 1), 0, textYPos + textSmallPaint.getTextSize() / 3.0f, textSmallPaint);
+        c.drawText(title.substring(spacePos + 1), 0, textYPos + textVerySmallPaint.getTextSize() / 3.0f, textVerySmallPaint);
 
-      } else if (title.length() > 2) // Over two lines but no space in the title
-        c.drawText(title, 0, textYPos, textSmallPaint);
-      else
+      } else if (title.length() > 3) {
+        c.drawText(title, 0, textYPos - 4.0f, textVerySmallPaint);
+      } else if (title.length() > 2) {
+        c.drawText(title, 0, textYPos - 2.0f, textSmallPaint);
+      } else {
         c.drawText(title, 0, textYPos, textPaint);
+      }
 
     } // synchronized (c)
 
@@ -115,6 +123,7 @@ public class VehicleBitmapFactory {
   private static final Paint bearingPaint = new Paint();
   private static final Paint textPaint = new Paint();
   private static final Paint textSmallPaint = new Paint();
+  private static final Paint textVerySmallPaint = new Paint();
   private static final Paint circleInnerPaint = new Paint();
   private static final Paint circleOuterPaint = new Paint();
   private static final Path path = new Path();
@@ -123,7 +132,7 @@ public class VehicleBitmapFactory {
 
   private static final int distanceInner = Utils.dipToPx(14);
   private static final int distanceBearing = (int) Math.ceil(Math.sqrt(2 * distanceInner * distanceInner));
-  private static final float bearingArrowSideRad = FloatMath.cos(distanceInner / distanceBearing);
+  private static final float bearingArrowSideRad = (float) Math.cos(distanceInner / distanceBearing);
 
   private static final int bitmapWidth = (distanceBearing + 2) * 2;
   private static final int bitmapHeight = bitmapWidth;
@@ -143,10 +152,13 @@ public class VehicleBitmapFactory {
     textPaint.setColor(Color.BLACK);
     textPaint.setAntiAlias(true);
     textPaint.setTypeface(Typeface.DEFAULT_BOLD);
-    textYPos = textPaint.getTextSize() / 3.0f;
+    textYPos = textPaint.getTextSize() / 3.0f - 1.0f;
 
     textSmallPaint.set(textPaint);
     textSmallPaint.setTextSize(Utils.dipToPx(13));
+
+    textVerySmallPaint.set(textPaint);
+    textVerySmallPaint.setTextSize(Utils.dipToPx(11));
 
     circleInnerPaint.setAntiAlias(false);
     circleInnerPaint.setStyle(Paint.Style.FILL);

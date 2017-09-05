@@ -1,20 +1,23 @@
 package com.sekakuoro.depart.tracker;
 
-import java.io.BufferedReader;
-import java.io.StringReader;
-
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.sekakuoro.depart.LocationItem;
 import com.sekakuoro.depart.LocationItemCollection;
-import com.sekakuoro.depart.LocationItemCollection.TypeIdEnum;
 import com.sekakuoro.depart.Updater;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.util.Iterator;
 
 public class Hsl extends Updater {
 
   public Hsl() {
-    super("Hsl", "http://83.145.232.209:10001/?type=vehicles&lng1=23&lat1=60&lng2=26&lat2=61", new Rect(
-        (int) (24.2975 * 1E6), (int) (60.0049 * 1E6), (int) (25.4994 * 1E6), (int) (60.6313 * 1E6)),
+    super("Hsl", "https://api.digitransit.fi/realtime/vehicle-positions/v1/hfp/", new Rect(
+        (int) (24.1 * 1E6), (int) (60.0 * 1E6), (int) (25.6 * 1E6), (int) (60.6 * 1E6)),
         LocationItemCollection.TypeIdEnum.Bus, LocationItemCollection.AreaTypeIdEnum.Hsl);
   }
 
@@ -22,75 +25,75 @@ public class Hsl extends Updater {
   protected boolean parsePayload(final String payload) {
     boolean ok = true;
 
-    final BufferedReader br = new BufferedReader(new StringReader(payload));
-
     try {
-      String line = null;
-      while ((line = br.readLine()) != null) {
+      final JSONObject rootJsonObject = (JSONObject) new JSONTokener(payload).nextValue();
+
+      for (Iterator<String> iter = rootJsonObject.keys(); iter.hasNext(); ) {
         try {
-          final String s[] = line.split(";");
-          if (s.length < 5 || s[0].length() == 0)
+          final String keyName = iter.next();
+          final JSONObject jsonObject = rootJsonObject.getJSONObject(keyName).getJSONObject("VP");
+
+          final String id = jsonObject.getString("veh");
+
+          if (id.startsWith("TKL")) {
             continue;
-
-          TypeIdEnum typeId = itemcoll.typeId;
-          String title = "";
-
-          if (s[0].toLowerCase().startsWith("metro")) {
-            if (s[1].equals("1"))
-              title = "M";
-            else if (s[1].equals("2"))
-              title = "V";
-            typeId = TypeIdEnum.Metro;
-          } else { // Bus & Tram
-            title = s[1].substring(1).replaceFirst("^0+", "").replaceAll(" .+", "")
-                .replaceFirst("([0-9]+[A-Za-z]+)[0-9]+$", "$1").trim();
-            if (title.length() == 0)
-              continue;
-
-            try {
-              if (Integer.parseInt(title.replaceAll("[^0-9]+", "")) <= 10)
-                typeId = TypeIdEnum.Tram;
-            } catch (NumberFormatException e) {
-            }
           }
 
-          final short bearing = Short.parseShort(s[4]);
-          final int lat = (int) (Float.parseFloat(s[3]) * 1E6);
-          final int lng = (int) (Float.parseFloat(s[2]) * 1E6);
+          final String title = jsonObject.getString("desi");
+          final int lat = (int) (jsonObject.getDouble("lat") * 1E6);
+          final int lng = (int) (jsonObject.getDouble("long") * 1E6);
 
-          if (lat == 0 || lng == 0)
+          if (id.length() == 0 || title.length() == 0 || lat == 0 || lng == 0) {
             continue;
+          }
 
           itemcoll.updatingLock.lock();
           try {
-            LocationItem item = itemcoll.findLocationItemById(s[0]);
-
+            LocationItem item = itemcoll.findLocationItemById(id);
             if (item == null) {
               item = new LocationItem(itemcoll);
-              item.setId(s[0]);
-              item.typeId = typeId;
+              item.setId(id);
               itemcoll.add(item);
             }
 
             item.setTitle(title);
-            item.bearing = bearing;
+
+            if (jsonObject.has("hdg")) {
+              item.bearing = (short) jsonObject.getInt("hdg");
+            }
+
             item.lat = lat;
             item.lng = lng;
 
-            item.update();
+            if (keyName.contains("/bus/") || keyName.contains("/ferry/")) {
+              item.typeId = LocationItemCollection.TypeIdEnum.Bus;
+            } else if (keyName.contains("/rail/")) {
+              item.typeId = LocationItemCollection.TypeIdEnum.Train;
+            } else if (keyName.contains("/tram/")) {
+              item.typeId = LocationItemCollection.TypeIdEnum.Tram;
+            } else {
+              item.typeId = LocationItemCollection.TypeIdEnum.Bus;
+              Log.d("Hsl", "keyName " + keyName);
+            }
 
+            item.update();
           } finally {
             itemcoll.updatingLock.unlock();
           }
-        } catch (Exception e) {
+
+        } catch (JSONException e) {
+          Log.e("Hsl", "JSONException", e);
+        } catch (NumberFormatException e) {
+          Log.e("Hsl", "NumberFormatException", e);
         }
-      } // while
-    } catch (Exception e) {
+      }
+
+    } catch (JSONException e) {
+      Log.e("Hsl", "JSONException", e);
       ok = false;
     }
 
     return ok;
-
   }
 
 }

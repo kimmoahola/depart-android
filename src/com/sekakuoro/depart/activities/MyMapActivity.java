@@ -1,20 +1,20 @@
 package com.sekakuoro.depart.activities;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.analytics.tracking.android.GAServiceManager;
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
@@ -27,8 +27,12 @@ import com.sekakuoro.depart.mapui.MyOverlay;
 import com.sekakuoro.depart.views.MyMapView;
 import com.sekakuoro.depart.views.MyMapView.OnMoveListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MyMapActivity extends MapActivity {
 
+  private static final int MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 123;
   public static boolean isPaused = true;
   public int startCount = 1;
 
@@ -68,13 +72,40 @@ public class MyMapActivity extends MapActivity {
 
     isPaused = false;
 
-    MyApp.myLocationOverlay.enableLocationUpdates();
+    if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+
+      if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+          Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+      } else {
+        // No explanation needed, we can request the permission.
+        ActivityCompat.requestPermissions(this,
+            new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+            MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+      }
+    } else {
+      MyApp.myLocationOverlay.enableLocationUpdates();
+    }
 
     startCount = settings.getInt("startCount", 1);
 
     MyApp.uc.enableAll();
 
     handlerProgress.postDelayed(progressRunnable, PROGRESS_INTERVAL);
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    switch (requestCode) {
+      case MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+          // permission was granted
+          MyApp.myLocationOverlay.enableLocationUpdates();
+        }
+        break;
+      }
+    }
   }
 
   @Override
@@ -88,8 +119,7 @@ public class MyMapActivity extends MapActivity {
 
     final SharedPreferences.Editor editor = settings.edit();
     editor.putInt("startCount", startCount + 1);
-    if (mapView != null) { // Joskus nopeasti r‰pl‰‰m‰ll‰ ohjelmaa mapView on
-                           // null t‰ss‰ vaiheessa.
+    if (mapView != null) {
       editor.putInt("map.center.lat", mapView.getMapCenter().getLatitudeE6());
       editor.putInt("map.center.lng", mapView.getMapCenter().getLongitudeE6());
       editor.putInt("map.zoom", mapView.getZoomLevel());
@@ -108,8 +138,6 @@ public class MyMapActivity extends MapActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
-
-    GAServiceManager.getInstance().dispatch();
 
     for (int i = 0; i < MyApp.uc.updaters.size(); ++i) {
       MyApp.uc.updaters.get(i).setUpdaterListener(null);
@@ -305,8 +333,9 @@ public class MyMapActivity extends MapActivity {
       for (Updater updater : MyApp.uc.updaters) {
         if ((!updater.itemcoll.hasItems() || updater.millisToNextUpdate() < -5000)
             && updater.isPossibleAreaRectVisible() && updater.itemcoll.shouldDraw()) {
-          if (!visible)
+          if (!visible) {
             progressBar.setVisibility(View.VISIBLE);
+          }
           handlerProgress.postDelayed(progressRunnable, PROGRESS_INTERVAL);
           return;
         }

@@ -1,22 +1,22 @@
 package com.sekakuoro.depart.tracker;
 
-import java.io.IOException;
-import java.io.StringReader;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
 import android.graphics.Rect;
+import android.util.Log;
 
 import com.sekakuoro.depart.LocationItem;
 import com.sekakuoro.depart.LocationItemCollection;
 import com.sekakuoro.depart.Updater;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.util.Iterator;
+
 public class Vr extends Updater {
 
   public Vr() {
-    super("Vr", "http://188.117.35.14/TrainRSS/TrainService.svc/AllTrains", new Rect((int) (21.6217 * 1E6),
+    super("Vr", "", new Rect((int) (21.6217 * 1E6),
         (int) (55.7760 * 1E6), (int) (37.6555 * 1E6), (int) (67.3488 * 1E6)), LocationItemCollection.TypeIdEnum.Train,
         LocationItemCollection.AreaTypeIdEnum.Vr);
 
@@ -25,104 +25,71 @@ public class Vr extends Updater {
   }
 
   @Override
+  protected String getUrl() {
+    return "https://junatkartalla-cal-prod.herokuapp.com/trains/" + (System.currentTimeMillis() - 1000 * 30);
+  }
+
+  @Override
   protected boolean parsePayload(String payload) {
     boolean ok = true;
 
     try {
-      XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-      XmlPullParser xpp = factory.newPullParser();
-      xpp.setInput(new StringReader(payload));
-      factory.setNamespaceAware(true);
-      int eventType = xpp.getEventType();
+      final JSONObject rootJsonObject = ((JSONObject) new JSONTokener(payload).nextValue()).getJSONObject("trains");
 
-      int newLat = 0;
-      int newLng = 0;
-      short newBearing = 0;
-      String newTitle = "";
-      String newGuid = "";
+      for (Iterator<String> iter = rootJsonObject.keys(); iter.hasNext(); ) {
+        try {
+          final String keyName = iter.next();
+          final JSONObject jsonObject = rootJsonObject.getJSONObject(keyName);
 
-      while (eventType != XmlPullParser.END_DOCUMENT) {
+          // title to two lines
+          final String id = jsonObject.getString("id").replaceAll("(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", " ");
+          final String title = id;
+          final int lat = (int) (jsonObject.getDouble("latitude") * 1E6);
+          final int lng = (int) (jsonObject.getDouble("longitude") * 1E6);
+          final short bearing = (short) jsonObject.getInt("direction");
+          final short speed = (short) jsonObject.getInt("speed");
 
-        if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("item")) {
-
-          int state = 0;
-
-          try {
-            while (true) {
-              if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("georss:point")) {
-                final String[] latlng = xpp.nextText().split(" ");
-                try {
-                  newLat = (int) (Float.parseFloat(latlng[0]) * 1e6);
-                  newLng = (int) (Float.parseFloat(latlng[1]) * 1e6);
-                } catch (NumberFormatException e) {
-                  break;
-                }
-
-                if (newLat == 0 || newLng == 0)
-                  break;
-                state++;
-              } else if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("dir")) {
-                try {
-                  newBearing = Short.parseShort(xpp.nextText());
-                } catch (NumberFormatException e) {
-                  break;
-                }
-                state++;
-              } else if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("title")) {
-                newTitle = xpp.nextText();
-                if (newTitle.length() == 0)
-                  break;
-                state++;
-              } else if (eventType == XmlPullParser.START_TAG && xpp.getName().equals("guid")) {
-                newGuid = xpp.nextText();
-                if (newGuid.length() == 0)
-                  break;
-                state++;
-              } else if (state == 4) {
-
-                itemcoll.updatingLock.lock();
-                try {
-                  LocationItem item = itemcoll.findLocationItemById(newGuid);
-                  if (item == null) {
-                    item = new LocationItem(itemcoll);
-                    item.setId(newGuid);
-                    itemcoll.add(item);
-                  }
-
-                  item.setTitle(newTitle);
-                  item.bearing = newBearing;
-                  item.lat = newLat;
-                  item.lng = newLng;
-                  item.update();
-                } finally {
-                  itemcoll.updatingLock.unlock();
-                }
-
-                break;
-              } else if (eventType == XmlPullParser.END_TAG && xpp.getName().equals("item")) {
-                break;
-              }
-
-              eventType = xpp.next();
-
-            } // while
-          } catch (XmlPullParserException e) {
-          } catch (NumberFormatException e) {
-          } catch (IOException e) {
+          if (id.length() == 0 || title.length() == 0 || lat == 0 || lng == 0) {
+            continue;
           }
-        } // if item
 
-        eventType = xpp.next();
+          itemcoll.updatingLock.lock();
+          try {
+            LocationItem item = itemcoll.findLocationItemById(id);
+            if (item == null) {
+              item = new LocationItem(itemcoll);
+              item.setId(id);
+              itemcoll.add(item);
+            }
+
+            item.typeId = LocationItemCollection.TypeIdEnum.Train;
+            item.setTitle(title);
+
+            if (speed != 0 && bearing != 0) {
+              item.bearing = bearing;
+            }
+
+            item.lat = lat;
+            item.lng = lng;
+
+            item.update();
+          } finally {
+            itemcoll.updatingLock.unlock();
+          }
+
+        } catch (JSONException e) {
+          Log.e("Vr", "JSONException", e);
+        } catch (NumberFormatException e) {
+          Log.e("Vr", "NumberFormatException", e);
+        }
       }
 
-    } catch (XmlPullParserException e) {
-      ok = false;
-    } catch (IOException e) {
+    } catch (JSONException e) {
+      Log.e("Vr", "JSONException", e);
       ok = false;
     }
 
     return ok;
-
   }
 
 }

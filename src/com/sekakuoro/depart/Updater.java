@@ -71,7 +71,7 @@ public abstract class Updater {
 
   public LocationItemCollection itemcoll = new LocationItemCollection();
 
-  protected static final String CLOUD_EU_URL = "http://eu.cdn.sekakuoro.com/";
+  protected static final String CLOUD_EU_URL = "http://s3-eu-west-1.amazonaws.com/eu.cdn.sekakuoro.com/";
 
   protected String url;
   protected float maxItemSpeed = 40.0f * 1000.0f / 3600.0f; // meters per

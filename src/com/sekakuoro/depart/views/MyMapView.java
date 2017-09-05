@@ -1,16 +1,11 @@
 package com.sekakuoro.depart.views;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
 import android.os.Handler;
 import android.util.AttributeSet;
-import android.util.FloatMath;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 
@@ -23,6 +18,10 @@ import com.sekakuoro.depart.MyApp;
 import com.sekakuoro.depart.R;
 import com.sekakuoro.depart.helpers.DepartureSelector;
 import com.sekakuoro.depart.helpers.DistanceComparator;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
 public class MyMapView extends MapView {
 
@@ -75,7 +74,7 @@ public class MyMapView extends MapView {
         lastTouchTime = 0;
         final float diffX = lastTouchX - ev.getX();
         final float diffY = lastTouchY - ev.getY();
-        final float distance = FloatMath.sqrt(diffX * diffX + diffY * diffY);
+        final float distance = (float) Math.sqrt(diffX * diffX + diffY * diffY);
         if (distance <= scaledDoubleTapSlop) {
 
           // Double tap
@@ -99,7 +98,7 @@ public class MyMapView extends MapView {
     } else if (ev.getAction() == MotionEvent.ACTION_MOVE) {
       final float diffX = lastTouchX - ev.getX();
       final float diffY = lastTouchY - ev.getY();
-      final float distance = FloatMath.sqrt(diffX * diffX + diffY * diffY);
+      final float distance = (float) Math.sqrt(diffX * diffX + diffY * diffY);
       if (distance > scaledDoubleTapSlop) {
         doubleTapping = false;
         if (onTapRunnable != null) {
@@ -161,7 +160,7 @@ public class MyMapView extends MapView {
 
       final int xDiff = itemScreenCoords.x - tapScreenCoordsX;
       final int yDiff = itemScreenCoords.y - tapScreenCoordsY;
-      final float distance = FloatMath.sqrt(xDiff * xDiff + yDiff * yDiff);
+      final float distance = (float) Math.sqrt(xDiff * xDiff + yDiff * yDiff);
 
       if (distance <= mGestureThreshold)
         clickedItems.add(item);

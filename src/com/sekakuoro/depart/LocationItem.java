@@ -161,36 +161,38 @@ public class LocationItem {
     Uri uri = Uri.EMPTY;
 
     if (isStop()) {
-      if (areaTypeId == AreaTypeIdEnum.Tre)
+      if (areaTypeId == AreaTypeIdEnum.Tre) {
         uri = Uri.parse("http://aikataulut.tampere.fi/?mobile=1&stop=" + id);
-      else if (areaTypeId == AreaTypeIdEnum.Vr) {
+      } else if (areaTypeId == AreaTypeIdEnum.Vr) {
         final String encodedTitle = Uri.encode(title);
         uri = Uri
             .parse("https://shop.vr.fi/vrmobiili/ParseLocationDataForStation.do?query.stationName=" + encodedTitle);
-      } else if (areaTypeId == AreaTypeIdEnum.Hsl)
+      } else if (areaTypeId == AreaTypeIdEnum.Hsl) {
         uri = Uri.parse("http://www.omatlahdot.fi/omatlahdot/web?stopid=" + id
             + "&Submit=Hae&command=quicksearch&view=mobile");
-      else if (areaTypeId == AreaTypeIdEnum.Turku)
+      } else if (areaTypeId == AreaTypeIdEnum.Turku) {
         uri = Uri.parse("http://aikataulut.foli.fi/onlineinfomobile/index.fi.html#departures?stopId=" + id);
-      else if (areaTypeId == AreaTypeIdEnum.Jyvaskyla) {
+      } else if (areaTypeId == AreaTypeIdEnum.Jyvaskyla) {
         final String encodedTitle = Uri.encode(title);
         uri = Uri.parse("http://info.jyvaskylanliikenne.fi/?ua=select&v=pda&key=" + encodedTitle + "&lcn=" + id + "%7C"
             + encodedTitle);
       }
     } else {
       if (areaTypeId == AreaTypeIdEnum.Tre) {
-        final String lineNumber = title.replaceAll("[^0-9AB]+", "");
-        uri = Uri.parse("http://aikataulut.tampere.fi/?line=" + lineNumber + "&mobile=1&page=lineTimetable");
+        uri = Uri.parse("http://aikataulut.tampere.fi/?line=" + title + "&mobile=1&page=lineTimetable");
       } else if (areaTypeId == AreaTypeIdEnum.Vr) {
-        uri = Uri.parse("https://shop.vr.fi/vrmobiili/ParseLocationDataForTrain.do?trainQuery=" + id);
+        final String trainNumber = title.replaceAll("[^0-9]+", "");
+        uri = Uri.parse("https://www.vr.fi/cs/vr/fi/juku#train=" + trainNumber);
       } else if (areaTypeId == AreaTypeIdEnum.Hsl) {
         if (typeId == TypeIdEnum.Metro) {
-          if (title.equals("M"))
+          if (title.equals("M")) {
             uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/hMetro_Mellunmaki.html");
-          else if (title.equals("V"))
+          } else if (title.equals("V")) {
             uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/hMetro_Vuosaari.html");
-        } else
+          }
+        } else {
           uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/haku/?key=" + title);
+        }
       } else if (areaTypeId == AreaTypeIdEnum.Turku) {
         uri = Uri.parse("http://www.foli.fi/fi/node/1581/");
       }
@@ -203,23 +205,23 @@ public class LocationItem {
       String id) {
     Uri uri = Uri.EMPTY;
 
-    if (title == null || id == null)
+    if (title == null || id == null) {
       return uri;
+    }
 
     if (areaTypeId == AreaTypeIdEnum.Tre) {
-      final String lineNumber = title.replaceAll("[^0-9AB]+", "");
-      uri = Uri.parse("http://aikataulut.tampere.fi/?line=" + lineNumber + "&mobile=1&page=lineTimetable");
+      uri = Uri.parse("http://aikataulut.tampere.fi/?line=" + title + "&mobile=1&page=lineTimetable");
     } else if (areaTypeId == AreaTypeIdEnum.Vr) {
-      uri = Uri.parse("https://shop.vr.fi/vrmobiili/ParseLocationDataForTrain.do?trainQuery=" + id);
-      // }
+      final String trainNumber = title.replaceAll("[^0-9]+", "");
+      uri = Uri.parse("https://www.vr.fi/cs/vr/fi/juku#train=" + trainNumber);
     } else if (areaTypeId == AreaTypeIdEnum.Hsl) {
-      if (title.equals("M"))
+      if (title.equals("M")) {
         uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/hMetro_Mellunmaki.html");
-      else if (title.equals("V"))
+      } else if (title.equals("V")) {
         uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/hMetro_Vuosaari.html");
-      // }
-      else
+      } else {
         uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/haku/?key=" + title);
+      }
     } else if (areaTypeId == AreaTypeIdEnum.Turku) {
       uri = Uri.parse("http://turku.seasam.com/nettinaytto/web?linjatunnus=" + title + "&command=search&view=mobile");
     }

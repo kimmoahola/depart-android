@@ -1,7 +1,5 @@
 package com.sekakuoro.depart;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Locale;
@@ -10,25 +8,15 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
-import org.apache.http.util.EntityUtils;
-
 import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
-import android.net.http.AndroidHttpClient;
 import android.preference.PreferenceManager;
 
-import com.google.analytics.tracking.android.GAServiceManager;
-import com.google.analytics.tracking.android.GoogleAnalytics;
-import com.google.analytics.tracking.android.Tracker;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.sekakuoro.depart.bulletins.BulletinsFeed;
 import com.sekakuoro.depart.helpers.Utils;
 import com.sekakuoro.depart.mapui.MyLocationOverlay;
@@ -42,6 +30,11 @@ import com.sekakuoro.depart.tracker.Tre;
 import com.sekakuoro.depart.tracker.Turku;
 import com.sekakuoro.depart.tracker.Vr;
 
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
+
 public class MyApp extends Application {
   public static final String TAG = "MyApp";
 
@@ -53,7 +46,8 @@ public class MyApp extends Application {
 
   public static MyApp instance;
 
-  private static Tracker tracker = null;
+  private static GoogleAnalytics sAnalytics = null;
+  private static Tracker sTracker = null;
   public static MyLocationOverlay myLocationOverlay;
 
   public static UpdaterCollection uc = new UpdaterCollection();
@@ -89,12 +83,6 @@ public class MyApp extends Application {
   private static ScheduledThreadPoolExecutor executor = new ScheduledThreadPoolExecutor(getDefaultCorePoolSize(),
       threadFactory);
 
-  public interface PurchaseListener {
-    void onFullVersion();
-  }
-
-  public static PurchaseListener purchaseListener = null;
-
   public static MyApp getApp() {
     return instance;
   }
@@ -103,6 +91,7 @@ public class MyApp extends Application {
   public void onCreate() {
     instance = this;
     super.onCreate();
+    sAnalytics = GoogleAnalytics.getInstance(this);
     Utils.init();
 
     FavoritesCollection.setContextAndLoad(this.getBaseContext());
@@ -204,37 +193,42 @@ public class MyApp extends Application {
     filterId = id;
   }
 
-  private static Tracker getTracker() {
-    if (tracker == null) {
-      final GoogleAnalytics myInstance = GoogleAnalytics.getInstance(getApp().getApplicationContext());
-      GAServiceManager.getInstance().setDispatchPeriod(30);
-      tracker = myInstance.getTracker("UA-00000000-0");
-      myInstance.setDefaultTracker(tracker);
+  synchronized private static Tracker getTracker() {
+    if (sTracker == null) {
+      sTracker = sAnalytics.newTracker("UA-00000000-0");
     }
 
-    return tracker;
+    return sTracker;
   }
 
   public static void trackView(final String analyticsPagePath) {
-    if (useAnalytics)
-      getTracker().sendView(analyticsPagePath);
+    if (useAnalytics) {
+      Tracker t = getTracker();
+      t.setScreenName(analyticsPagePath);
+      t.send(new HitBuilders.ScreenViewBuilder().build());
+    }
   }
 
   public static void trackEvent(final String category, final String action, final String label, final long value) {
-    if (useAnalytics)
-      getTracker().sendEvent(category, action, label, value);
+    if (useAnalytics) {
+      getTracker().send(new HitBuilders.EventBuilder()
+              .setCategory(category)
+              .setAction(action)
+              .setLabel(label)
+              .setValue(value)
+              .build());
+    }
   }
 
   public static void trackTiming(final String category, final long interval, final String name, final String label) {
-    if (interval <= 1000 * 60 && useAnalytics)
-      getTracker().sendTiming(category, interval, name, label);
-  }
-
-  private static final HttpParams httpParameters = new BasicHttpParams();
-  static {
-    HttpConnectionParams.setConnectionTimeout(httpParameters, 7000);
-    HttpConnectionParams.setSoTimeout(httpParameters, 7000);
-
+    if (interval <= 1000 * 60 && useAnalytics) {
+      getTracker().send(new HitBuilders.TimingBuilder()
+              .setCategory(category)
+              .setValue(interval)
+              .setVariable(name)
+              .setLabel(label)
+              .build());
+    }
   }
 
   public static String GetHttpFile(final String url, final LocationItem item) {
@@ -282,19 +276,29 @@ public class MyApp extends Application {
     return payload;
   }
 
-  private static String GetHttpFile(final String url) {
-
+  private static ResponseBody GetHttpFileResponse(final String url) {
     try {
-      final HttpUriRequest request = new HttpGet(url);
-      AndroidHttpClient.modifyRequestToAcceptGzipResponse(request);
-      request.addHeader("Accept", "application/json");
-      final HttpResponse response = new DefaultHttpClient(httpParameters).execute(request);
-      if (response.getStatusLine().getStatusCode() == 200) {
-        InputStream inputStream = AndroidHttpClient.getUngzippedContent(response.getEntity());
-        String charSet = EntityUtils.getContentCharSet(response.getEntity());
-        if (charSet == null)
-          charSet = "utf-8";
-        return new java.util.Scanner(inputStream, charSet).useDelimiter("\\A").next();
+      OkHttpClient client = new OkHttpClient.Builder()
+              .connectTimeout(30, TimeUnit.SECONDS)
+              .writeTimeout(30, TimeUnit.SECONDS)
+              .readTimeout(30, TimeUnit.SECONDS)
+              .build();
+
+      Request request = new Request.Builder().url(url).build();
+
+      Response response = client.newCall(request).execute();
+      return response.body();
+    } catch (Exception e) {
+    }
+
+    return null;
+  }
+
+  private static String GetHttpFile(final String url) {
+    try {
+      ResponseBody body = GetHttpFileResponse(url);
+      if (body != null) {
+          return body.string();
       }
     } catch (Exception e) {
     }
@@ -303,21 +307,10 @@ public class MyApp extends Application {
   }
 
   public static byte[] GetHttpFileAsBytes(final String url) {
-
     try {
-      final HttpUriRequest request = new HttpGet(url);
-      AndroidHttpClient.modifyRequestToAcceptGzipResponse(request);
-      final HttpResponse response = new DefaultHttpClient(httpParameters).execute(request);
-      if (response.getStatusLine().getStatusCode() == 200) {
-        InputStream inputStream;
-        inputStream = AndroidHttpClient.getUngzippedContent(response.getEntity());
-
-        final ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-        int nRead;
-        final byte[] data = new byte[16384];
-        while ((nRead = inputStream.read(data)) != -1)
-          buffer.write(data, 0, nRead);
-        return buffer.toByteArray();
+      ResponseBody body = GetHttpFileResponse(url);
+      if (body != null) {
+        return body.bytes();
       }
     } catch (Exception e) {
     }

@@ -40,7 +40,7 @@ public class StopBitmapFactory {
     circleOuterPaint.setStyle(Paint.Style.STROKE);
     circleOuterPaint.setStrokeWidth(Utils.dipToPx(2));
 
-    final int bitmapWidth = (radius + 1) * 2;
+    final int bitmapWidth = (radius + 4) * 2;
     final int bitmapHeight = bitmapWidth;
 
     Canvas c = new Canvas();

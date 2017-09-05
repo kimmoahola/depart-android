@@ -1,7 +1,5 @@
 package com.sekakuoro.depart.mapui;
 
-import java.util.List;
-
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -13,7 +11,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.FloatMath;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -21,6 +18,8 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 import com.google.android.maps.Projection;
 import com.sekakuoro.depart.activities.MyMapActivity;
+
+import java.util.List;
 
 public class MyLocationOverlay extends ItemizedOverlay<OverlayItem> implements LocationListener {
 
@@ -92,8 +91,9 @@ public class MyLocationOverlay extends ItemizedOverlay<OverlayItem> implements L
   public void enableLocationUpdates() {
     handler.removeCallbacksAndMessages(null);
 
-    if (enabled)
+    if (enabled) {
       return;
+    }
 
     removeLocationIfOld();
 
@@ -104,13 +104,13 @@ public class MyLocationOverlay extends ItemizedOverlay<OverlayItem> implements L
           mLocationManager.requestLocationUpdates(p, UPDATE_TIME, UPDATE_DISTANCE, this);
           enabled = true;
         }
-      } catch (Exception e) {
+      } catch (SecurityException e) {
       }
 
       try {
         final Location candidate = mLocationManager.getLastKnownLocation(p);
         onLocationChanged(candidate);
-      } catch (Exception e) {
+      } catch (SecurityException e) {
       }
     }
   }
@@ -165,7 +165,7 @@ public class MyLocationOverlay extends ItemizedOverlay<OverlayItem> implements L
     if (accuracy < 200.0f)
       accuracy = 200.0f;
 
-    final float magic = 1.0f / FloatMath.cos((float) Math.toRadians(lastKnownLocation.getLatitude()));
+    final float magic = (float) (1.0 / Math.cos((float) Math.toRadians(lastKnownLocation.getLatitude())));
     return (int) (magic * accuracy * DEGREES_PER_METER * 1e6f * 2.0f);
   }
 

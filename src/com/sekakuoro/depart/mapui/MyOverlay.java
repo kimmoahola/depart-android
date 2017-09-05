@@ -1,16 +1,10 @@
 package com.sekakuoro.depart.mapui;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.Rect;
-import android.util.FloatMath;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapView;
@@ -20,6 +14,11 @@ import com.sekakuoro.depart.LocationItem;
 import com.sekakuoro.depart.Updater;
 import com.sekakuoro.depart.Updater.UpdaterListener;
 import com.sekakuoro.depart.activities.MyMapActivity;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 public class MyOverlay extends Overlay implements UpdaterListener {
 
@@ -183,7 +182,7 @@ public class MyOverlay extends Overlay implements UpdaterListener {
 
       final int oldSubAreaSize = subAreaSize;
 
-      subAreaSize = (int) FloatMath.floor(FloatMath.sqrt(updater.itemcoll.size() / itemsPerSubArea));
+      subAreaSize = (int) Math.floor(Math.sqrt(updater.itemcoll.size() / itemsPerSubArea));
       if (subAreaSize < 2) {
         subAreaSize = 2;
       }
@@ -229,8 +228,8 @@ public class MyOverlay extends Overlay implements UpdaterListener {
         updater.itemcoll.updatingLock.unlock();
       }
 
-      final int subAreaWidth = (int) FloatMath.ceil((float) areaRect.width() / subAreaSize) + 1;
-      final int subAreaHeight = (int) FloatMath.ceil((float) areaRect.height() / subAreaSize) + 1;
+      final int subAreaWidth = (int) Math.ceil((float) areaRect.width() / subAreaSize) + 1;
+      final int subAreaHeight = (int) Math.ceil((float) areaRect.height() / subAreaSize) + 1;
 
       for (int x = 0; x < subAreaSize && mOverlaysStillToBeAdded.size() > 0; ++x) {
         for (int y = 0; y < subAreaSize && mOverlaysStillToBeAdded.size() > 0; ++y) {
@@ -250,6 +249,7 @@ public class MyOverlay extends Overlay implements UpdaterListener {
             for (Iterator<LocationItem> it = mOverlaysStillToBeAdded.iterator(); it.hasNext();) {
 
               final LocationItem item = it.next();
+
               if (r.contains(item.getGeoPoint().getLongitudeE6(), item.getGeoPoint().getLatitudeE6())) {
                 subAreaRectItems.get(pos).add(item);
                 it.remove();

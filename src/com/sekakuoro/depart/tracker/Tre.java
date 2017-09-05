@@ -1,14 +1,14 @@
 package com.sekakuoro.depart.tracker;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.graphics.Rect;
 
 import com.sekakuoro.depart.LocationItem;
 import com.sekakuoro.depart.LocationItemCollection;
 import com.sekakuoro.depart.Updater;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Tre extends Updater {
 
