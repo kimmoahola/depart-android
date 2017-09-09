@@ -138,9 +138,6 @@ public class LocationItem {
             .parse("http://api.publictransport.tampere.fi/prod/?request=stop&dep_limit=20&time_limit=360&format=json&user=departtre&pass=3f85a57c&code="
                 + id);
       break;
-      case Vr:
-        uri = Uri.parse("http://188.117.35.14/TrainRSS/TrainService.svc/StationInfo?station=" + id);
-      break;
       case Turku:
         uri = Uri.parse("http://aikataulut.foli.fi/webapi/departures/bystop/" + id
             + "?maxInfos=10&key=dbf4284a9ca3a9858f3ec3ef37e26cd4&_=" + System.currentTimeMillis());
@@ -164,9 +161,7 @@ public class LocationItem {
       if (areaTypeId == AreaTypeIdEnum.Tre) {
         uri = Uri.parse("http://aikataulut.tampere.fi/?mobile=1&stop=" + id);
       } else if (areaTypeId == AreaTypeIdEnum.Vr) {
-        final String encodedTitle = Uri.encode(title);
-        uri = Uri
-            .parse("https://shop.vr.fi/vrmobiili/ParseLocationDataForStation.do?query.stationName=" + encodedTitle);
+        uri = Uri.parse("https://junatkartalla.vr.fi/?lang=fi-FI&direction=DEPARTURES&station=" + id);
       } else if (areaTypeId == AreaTypeIdEnum.Hsl) {
         uri = Uri.parse("http://www.omatlahdot.fi/omatlahdot/web?stopid=" + id
             + "&Submit=Hae&command=quicksearch&view=mobile");
@@ -181,8 +176,7 @@ public class LocationItem {
       if (areaTypeId == AreaTypeIdEnum.Tre) {
         uri = Uri.parse("http://aikataulut.tampere.fi/?line=" + title + "&mobile=1&page=lineTimetable");
       } else if (areaTypeId == AreaTypeIdEnum.Vr) {
-        final String trainNumber = title.replaceAll("[^0-9]+", "");
-        uri = Uri.parse("https://www.vr.fi/cs/vr/fi/juku#train=" + trainNumber);
+        uri = Uri.parse("https://junatkartalla.vr.fi/?lang=fi-FI&train=" + id);
       } else if (areaTypeId == AreaTypeIdEnum.Hsl) {
         if (typeId == TypeIdEnum.Metro) {
           if (title.equals("M")) {
@@ -212,8 +206,7 @@ public class LocationItem {
     if (areaTypeId == AreaTypeIdEnum.Tre) {
       uri = Uri.parse("http://aikataulut.tampere.fi/?line=" + title + "&mobile=1&page=lineTimetable");
     } else if (areaTypeId == AreaTypeIdEnum.Vr) {
-      final String trainNumber = title.replaceAll("[^0-9]+", "");
-      uri = Uri.parse("https://www.vr.fi/cs/vr/fi/juku#train=" + trainNumber);
+      uri = Uri.parse("https://junatkartalla.vr.fi/?lang=fi-FI&train=" + id);
     } else if (areaTypeId == AreaTypeIdEnum.Hsl) {
       if (title.equals("M")) {
         uri = Uri.parse("http://aikataulut.hsl.fi/linjat/fi/hMetro_Mellunmaki.html");

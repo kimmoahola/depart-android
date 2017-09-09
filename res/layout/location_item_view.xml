@@ -5,8 +5,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical" >
 
-    <!-- TODO: RelativeLayout eroon koska luokka periytyy jo siitä ?? -->
-
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
@@ -43,17 +41,6 @@
         android:layout_toLeftOf="@+id/distance"
         android:paddingTop="3dip" />
 
-<!--
-    <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/areaName"
-        android:layout_margin="6dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
--->
-
     <com.sekakuoro.depart.views.StandardDepartureListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
@@ -71,26 +58,5 @@
         android:layout_marginTop="-7dip"
         android:indeterminate="true"
         android:visibility="visible" />
-
-    
-<!--
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="@style/Holo.ProgressBar.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:indeterminate="true"
-        android:visibility="visible" />
-
--->
-<!--
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
--->
 
 </RelativeLayout>

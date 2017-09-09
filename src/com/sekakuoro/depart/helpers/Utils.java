@@ -1,18 +1,15 @@
 package com.sekakuoro.depart.helpers;
 
+import com.google.android.maps.GeoPoint;
+import com.sekakuoro.depart.MyApp;
+import com.sekakuoro.depart.R;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.regex.Pattern;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
-import com.google.android.maps.GeoPoint;
-import com.sekakuoro.depart.MyApp;
-import com.sekakuoro.depart.R;
-import com.ximpleware.NavException;
-import com.ximpleware.VTDNav;
 
 public class Utils {
 
@@ -48,22 +45,6 @@ public class Utils {
 
   public static int dipToPx(final float dip) {
     return (int) (dip * dipScale + 0.5f);
-  }
-
-  public static String GetVTDElementText(final VTDNav vn, final String elementName) {
-    String text = "";
-
-    try {
-      if (vn.toElement(VTDNav.FIRST_CHILD, elementName)) {
-        int result = vn.getText();
-        if (result != -1)
-          text = vn.toString(result);
-        vn.toElement(VTDNav.PARENT);
-      }
-    } catch (NavException e) {
-    }
-
-    return text;
   }
 
   public static class TimeDate {
@@ -215,20 +196,6 @@ public class Utils {
      */
     public static double radToBearing(double rad) {
       return (Math.toDegrees(rad) + 360) % 360;
-    }
-  }
-
-  public static byte[] compress(final byte[] payload) {
-    try {
-      final ByteArrayOutputStream os = new ByteArrayOutputStream();
-      final GZIPOutputStream gos = new GZIPOutputStream(os);
-      gos.write(payload);
-      gos.close();
-      final byte[] compressed = os.toByteArray();
-      os.close();
-      return compressed;
-    } catch (Exception e) {
-      return new byte[] {};
     }
   }
 

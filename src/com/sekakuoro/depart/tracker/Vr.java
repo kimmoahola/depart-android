@@ -41,9 +41,9 @@ public class Vr extends Updater {
           final String keyName = iter.next();
           final JSONObject jsonObject = rootJsonObject.getJSONObject(keyName);
 
+          final String id = jsonObject.getString("id");
           // title to two lines
-          final String id = jsonObject.getString("id").replaceAll("(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", " ");
-          final String title = id;
+          final String title = jsonObject.getString("id").replaceAll("(?<=[A-Za-z])(?=[0-9])|(?<=[0-9])(?=[A-Za-z])", " ");
           final int lat = (int) (jsonObject.getDouble("latitude") * 1E6);
           final int lng = (int) (jsonObject.getDouble("longitude") * 1E6);
           final short bearing = (short) jsonObject.getInt("direction");
