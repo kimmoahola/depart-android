@@ -14,12 +14,4 @@
         android:key="useGPSPref"
         android:title="@string/useGPSTitle" />
 
-    <ListPreference
-        android:defaultValue="@string/rssLangDefaultValue"
-        android:entries="@array/rssLangNames"
-        android:entryValues="@array/rssLangValues"
-        android:key="rssLangPref"
-        android:summary="@string/rssLangDefaultValue"
-        android:title="@string/rssLangTitle" />
-
 </PreferenceScreen>

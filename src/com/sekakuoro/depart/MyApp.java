@@ -17,7 +17,6 @@ import android.preference.PreferenceManager;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
-import com.sekakuoro.depart.bulletins.BulletinsFeed;
 import com.sekakuoro.depart.helpers.Utils;
 import com.sekakuoro.depart.mapui.MyLocationOverlay;
 import com.sekakuoro.depart.stops.HslStops;
@@ -42,7 +41,6 @@ public class MyApp extends Application {
 
   public static final int UPDATER_TIMINGS_FREQ = 600;
   public static final int ABSTRACT_DEPARTURE_ACTIVITY_TIMINGS_FREQ = 15;
-  public static final int BULLETINS_TIMINGS_FREQ = 5;
 
   public static MyApp instance;
 
@@ -55,13 +53,8 @@ public class MyApp extends Application {
   public static int updateSpeedSelection = 1;
   public static float[] updateSpeedMultipliers = { 0.6666f, 1.0f, 1.6666f };
 
-  public static ArrayList<BulletinsFeed> bulletinFeeds = new ArrayList<BulletinsFeed>();
-
   public static boolean useGPS = true;
   public static long filterId = -1;
-
-  private static String rssLang = "default";
-  public static boolean rssLangSystemDefault = true;
 
   public static final String STATE_KEY = "Depart";
 
@@ -113,17 +106,6 @@ public class MyApp extends Application {
     uc.add(new Turku());
   }
 
-  public static void initBulletinFeeds() {
-    if (bulletinFeeds.isEmpty()) {
-      bulletinFeeds.add(new BulletinsFeed(R.string.bulletinsVr, "VR", getRssLang(),
-          "http://ext-service.vr.fi/juha/internet/rss/tiedotteetrss.action?lang="));
-      bulletinFeeds.add(new BulletinsFeed(R.string.bulletinsTre, "Tre", "",
-          "http://joukkoliikenne-tampere.sivuviidakko.fi/etusivu.rss"));
-      bulletinFeeds.add(new BulletinsFeed(R.string.bulletinsLiik, "Liik", "",
-          "http://www.epressi.com/feeds/liikennevirasto.rss"));
-    }
-  }
-
   public static Resources getResourcesWrapper() {
     return MyApp.getApp().getResources();
   }
@@ -152,12 +134,6 @@ public class MyApp extends Application {
 
       useGPS = prefs.getBoolean("useGPSPref", true);
 
-      rssLang = prefs.getString("rssLangPref", getApp().getResources().getStringArray(R.array.rssLangValues)[0]);
-      if (MyApp.rssLang.equals(getApp().getResources().getStringArray(R.array.rssLangValues)[0]))
-        MyApp.rssLangSystemDefault = true;
-      else
-        MyApp.rssLangSystemDefault = false;
-
     } catch (Exception e) {
     }
 
@@ -165,28 +141,6 @@ public class MyApp extends Application {
 
   public static float getUpdateSpeedMultiplier() {
     return updateSpeedMultipliers[updateSpeedSelection];
-  }
-
-  public static String getRssLang() {
-    String lang = rssLang;
-
-    if (rssLangSystemDefault) {
-      lang = Locale.getDefault().getLanguage();
-      if (!Arrays.asList(getApp().getResources().getStringArray(R.array.rssLangValues)).contains(lang)) {
-        lang = "en";
-      }
-    }
-
-    return lang;
-  }
-
-  public static void setRssLang(String string) {
-    rssLang = string;
-    if (rssLang.equals(getApp().getResources().getStringArray(R.array.rssLangValues)[0])) {
-      rssLangSystemDefault = true;
-    } else {
-      rssLangSystemDefault = false;
-    }
   }
 
   public static void setFilter(long id) {

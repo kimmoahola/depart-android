@@ -3,7 +3,6 @@
     android:id="@+id/listViewRow"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:drawable/list_selector_background"
     android:orientation="horizontal"
     android:paddingBottom="0dp"
     android:paddingTop="0dp" >
@@ -14,6 +13,7 @@
         android:layout_height="match_parent"
         android:layout_margin="8dp"
         android:gravity="center_vertical"
+        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -23,7 +23,7 @@
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:layout_margin="8dp"
-        android:singleLine="false"
+        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -32,6 +32,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:layout_margin="8dp"
+        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -40,6 +41,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:layout_margin="8dp"
+        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -48,6 +50,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:layout_margin="8dp"
+        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     
 </LinearLayout>

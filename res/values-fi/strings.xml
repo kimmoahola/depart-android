@@ -15,26 +15,7 @@
         <item>Kohtalainen</item>
         <item>Hidas</item>
     </string-array>
-    
-    
-    
-    
-    
-    
 
-    <string name="rssLangTitle">Liikennetiedotteiden kieli</string>
-    <string-array name="rssLangNames">
-        <item>Järjestelmän kieli</item>
-        <item>Suomi</item>
-        <item>Englanti</item>
-    </string-array>
-    
-    
-    
-    
-    
-    
-    
     <string name="useGPSTitle">Käytä GPS:ää</string>
     
     
@@ -43,7 +24,6 @@
     <string name="map">Kartta</string>
     <string name="location">Sijainti</string>
     <string name="favorites">Suosikit</string>
-    <string name="bulletins">Liikennetiedotteet</string>
     <string name="satellite">Satelliitti</string>
     <string name="satelliteOff">Kartta</string>
     <string name="refreshAll">Päivitä kaikki</string>
@@ -75,18 +55,6 @@
     <string name="zoomTo">Kohdista kartta</string>
     <string name="departing">Lähtevät</string>
     <string name="arriving">Saapuvat</string>
-    
-    
-    <!-- Bulletins -->
-    
-    <string name="bulletinUpdating">Haetaan..</string>
-    <string name="bulletinsLoading">Ladataan liikennetiedotteita..</string>
-    <string name="bulletinsVr">VR tiedotteet</string>
-    <string name="bulletinsHsl">HSL tiedotteet</string>
-    <string name="bulletinsTre">Tampereen joukkoliikenteen tiedotteet</string>
-    <string name="bulletinsTurku">Turun liikenteen tiedotteet</string>
-    <string name="bulletinsLiik">Liikenneviraston tiedotteet</string>
-    
     
     <!-- Misc -->
     

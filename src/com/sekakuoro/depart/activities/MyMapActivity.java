@@ -181,10 +181,6 @@ public class MyMapActivity extends MapActivity {
         MyApp.trackEvent("Map", "Satellite", "Click", satellite ? 1 : 0);
         return true;
 
-      case R.id.bulletins:
-        startActivity(new Intent(getBaseContext(), BulletinsActivity.class));
-        return true;
-
       case R.id.refresh:
         handlerProgress.postDelayed(progressRunnable, 100);
         MyApp.trackEvent("Map", "Refresh", "Click", 1);

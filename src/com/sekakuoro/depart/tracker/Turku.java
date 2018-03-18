@@ -1,18 +1,16 @@
 package com.sekakuoro.depart.tracker;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.graphics.Rect;
 
 import com.sekakuoro.depart.LocationItem;
 import com.sekakuoro.depart.LocationItemCollection;
 import com.sekakuoro.depart.Updater;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.util.Iterator;
 
 public class Turku extends Updater {
 
@@ -23,30 +21,7 @@ public class Turku extends Updater {
 
   @Override
   protected String getUrl() {
-    String currentTime = (new SimpleDateFormat("HH:mm:ss")).format(new Date());
-    String currentDate = (new SimpleDateFormat("yyyyMMdd")).format(new Date());
-
-    try {
-      return "http://reittiopas.foli.fi/bin/query.exe/3finny?"
-          + "look_minx=20000000&"
-          + "look_maxx=24000000&"
-          + "look_miny=60000000&"
-          + "look_maxy=61000000&"
-          + "tpl=trains2json3&"
-          + "look_productclass=1&"
-          + "look_json=yes&"
-          + "performLocating=1&"
-          + "look_requesttime="
-          + currentTime
-          + "&"
-          + URLEncoder
-              .encode(
-                  "look_nv=get_rtmsgstatus|yes|get_zntrainname|no|zugposmode|2|interval|35000|intervalstep|2000|get_nstop|yes|get_pstop|yes|get_fstop|yes|get_stopevaids|yes|get_stoptimes|yes|get_rtstoptimes|yes|tplmode|trains2json3|correctunrealpos|no|livemapTrainfilter|yes|get_zusatztyp|yes|get_infotext|yes|&",
-                  "UTF-8") + "interval=35000&" + "intervalstep=2000&" + "livemapRequest=yes&" + "ts=" + currentDate
-          + "&";
-    } catch (UnsupportedEncodingException e) {
-      return "";
-    }
+    return "http://data.foli.fi/siri/vm";
   }
 
   @Override
@@ -58,22 +33,23 @@ public class Turku extends Updater {
       itemcoll.clear(); // Clear all items because Turku bus json don't have ID
                         // on the busses.
 
-      final JSONArray jsonArray = (new JSONArray(payload)).getJSONArray(0);
-      final int len = jsonArray.length();
+      final JSONObject rootJsonObject = ((JSONObject) new JSONTokener(payload).nextValue())
+          .getJSONObject("result").getJSONObject("vehicles");
 
-      for (int i = 0; i < len; ++i) {
+      for (Iterator<String> iter = rootJsonObject.keys(); iter.hasNext(); ) {
         try {
-          final JSONArray arr = jsonArray.getJSONArray(i);
+          final String keyName = iter.next();
+          final JSONObject jsonObject = rootJsonObject.getJSONObject(keyName);
 
-          final String title = arr.getString(0).replace("Linja", "").replace("Lin", "").trim();
-          final int lat = (int) arr.getInt(2);
-          final int lng = (int) arr.getInt(1);
+          final String title = jsonObject.getString("lineref").trim();
+          final int lat = (int) (jsonObject.getDouble("latitude") * 1E6);
+          final int lng = (int) (jsonObject.getDouble("longitude") * 1E6);
 
           if (title.length() == 0 || lat == 0 || lng == 0)
             continue;
 
           LocationItem item = new LocationItem(itemcoll);
-          item.setId("turku_bus_" + Integer.toString(i));
+          item.setId(keyName);
           itemcoll.add(item);
 
           item.setTitle(title);

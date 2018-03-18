@@ -3,7 +3,8 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@android:color/black" >
 
     <TextView
         android:id="@+id/name"
@@ -15,6 +16,7 @@
         android:layout_marginBottom="2dip"
         android:layout_marginLeft="4dip"
         android:layout_marginRight="4dip"
+        android:textColor="@android:color/white"
         android:textSize="12sp" />
 
     <TextView
@@ -27,6 +29,7 @@
         android:layout_marginBottom="2dip"
         android:layout_marginLeft="4dip"
         android:layout_marginRight="4dip"
+        android:textColor="@android:color/white"
         android:textSize="12sp" />
 
     <ImageView
@@ -47,6 +50,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/name"
         android:layout_marginTop="2dip"
+        android:background="@android:color/black"
         android:layout_marginBottom="0dip" />
     
     <ProgressBar

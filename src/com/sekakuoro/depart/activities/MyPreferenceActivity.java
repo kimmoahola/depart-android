@@ -13,7 +13,6 @@ import com.sekakuoro.depart.R;
 public class MyPreferenceActivity extends PreferenceActivity {
 
   private Preference updateSpeedPref;
-  private Preference rssLangPref;
 
   @SuppressWarnings("deprecation")
   @Override
@@ -50,23 +49,7 @@ public class MyPreferenceActivity extends PreferenceActivity {
       }
     });
 
-    rssLangPref = (Preference) findPreference("rssLangPref");
-    rssLangPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-      public boolean onPreferenceChange(Preference preference, Object newValue) {
-        try {
-          MyApp.setRssLang(newValue.toString());
-          MyApp.trackEvent("Preferences", "Change", preference.getKey(), 1);
-        } catch (Exception e) {
-        }
-
-        updateRssLangSummary();
-
-        return true;
-      }
-    });
-
     updateUpdateSpeedSummary();
-    updateRssLangSummary();
   }
 
   @Override
@@ -90,20 +73,6 @@ public class MyPreferenceActivity extends PreferenceActivity {
   public void updateUpdateSpeedSummary() {
     final String updateSpeedName = this.getResources().getStringArray(R.array.updateSpeedNames)[MyApp.updateSpeedSelection];
     updateSpeedPref.setSummary(updateSpeedName);
-  }
-
-  public void updateRssLangSummary() {
-    String rssLangName = "default";
-
-    if (MyApp.rssLangSystemDefault) {
-      rssLangName = this.getResources().getStringArray(R.array.rssLangNames)[0];
-    } else if (MyApp.getRssLang().equals(this.getResources().getStringArray(R.array.rssLangValues)[1])) {
-      rssLangName = this.getResources().getStringArray(R.array.rssLangNames)[1];
-    } else if (MyApp.getRssLang().equals(this.getResources().getStringArray(R.array.rssLangValues)[2])) {
-      rssLangName = this.getResources().getStringArray(R.array.rssLangNames)[2];
-    }
-
-    rssLangPref.setSummary(rssLangName);
   }
 
 }

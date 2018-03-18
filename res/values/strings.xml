@@ -3,7 +3,7 @@
     <!-- release -->
    	<!-- <string name="mapApiKey">google_maps_release_api_key_here</string> -->
 
-   	<!-- debug -->
+    <!-- debug -->
     <string name="mapApiKey">google_maps_debug_api_key_here</string>
 
     <string name="app_name">Depart</string>
@@ -26,19 +26,6 @@
     </string-array>
     <string name="updateSpeedDefaultValue">1</string>
 
-    <string name="rssLangTitle">Traffic bulletins language</string>
-    <string-array name="rssLangNames">
-        <item>System language</item>
-        <item>Finnish</item>
-        <item>English</item>
-    </string-array>
-    <string-array name="rssLangValues">
-        <item>default</item>
-        <item>fi</item>
-        <item>en</item>
-    </string-array>
-    <string name="rssLangDefaultValue">default</string>
-    
     <string name="useGPSTitle">Use GPS</string>
     
     
@@ -47,7 +34,6 @@
     <string name="map">Map</string>
     <string name="location">My location</string>
     <string name="favorites">Favorites</string>
-    <string name="bulletins">Traffic bulletins</string>
     <string name="satellite">Satellite</string>
     <string name="satelliteOff">Map</string>
     <string name="refreshAll">Refresh all</string>
@@ -79,18 +65,7 @@
     <string name="zoomTo">Focus map</string>
     <string name="departing">Departing</string>
     <string name="arriving">Arriving</string>
-    
-    
-    <!-- Bulletins -->
-    
-    <string name="bulletinUpdating">Fetching..</string>
-    <string name="bulletinsLoading">Loading traffic bulletins..</string>
-    <string name="bulletinsVr">VR information</string>
-    <string name="bulletinsHsl">HSL information</string>
-    <string name="bulletinsTre">Tampereen joukkoliikenteen tiedotteet (only finnish)</string>
-    <string name="bulletinsTurku">Turun liikenteen tiedotteet (only finnish)</string>
-    <string name="bulletinsLiik">Liikenneviraston tiedotteet (only finnish)</string>
-    
+
     
     <!-- Misc -->
 

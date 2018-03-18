@@ -3,12 +3,13 @@
     android:id="@+id/listViewRow"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@android:drawable/list_selector_background"
+    android:background="@android:color/black"
     android:longClickable="true"
     android:onClick="onRowClick"
     android:orientation="horizontal"
     android:paddingBottom="7dp"
-    android:paddingTop="7dp" >
+    android:paddingTop="7dp"
+    >
 
     <TextView
         android:id="@+id/title"
@@ -16,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
         android:layout_weight="1"
-        android:singleLine="false"
+        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
@@ -38,6 +39,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="3dp"
         android:gravity="center_vertical"
+        android:textColor="@android:color/white"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

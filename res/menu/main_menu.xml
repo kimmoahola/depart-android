@@ -10,7 +10,6 @@
         android:icon="@drawable/device_access_location_found"
         android:showAsAction="always"
         android:title="@string/location"></item>
-    <item android:id="@+id/bulletins" android:title="@string/bulletins" android:icon="@drawable/action_about" android:showAsAction="ifRoom"></item>
     <item android:id="@+id/refresh" android:title="@string/refreshAll" android:icon="@drawable/navigation_refresh" android:showAsAction="ifRoom"></item>
     <item android:id="@+id/satellite" android:title="@string/satellite" android:icon="@drawable/location_map" android:showAsAction="ifRoom"></item>
     <item android:id="@+id/settings" android:title="@string/settings" android:icon="@drawable/action_settings"></item>
