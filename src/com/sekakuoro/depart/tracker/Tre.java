@@ -13,7 +13,7 @@ import org.json.JSONObject;
 public class Tre extends Updater {
 
   public Tre() {
-    super("Tre", "http://lissu.tampere.fi/ajax_servers/busLocations.php", new Rect((int) (23.5598 * 1E6),
+    super("Tre", "https://lissu.tampere.fi/ajax_servers/busLocations.php", new Rect((int) (23.5598 * 1E6),
         (int) (61.4300 * 1E6), (int) (24.0590 * 1E6), (int) (61.7897 * 1E6)), LocationItemCollection.TypeIdEnum.Bus,
         LocationItemCollection.AreaTypeIdEnum.Tre);
   }

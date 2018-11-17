@@ -2,12 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.sekakuoro.depart"
     android:installLocation="auto"
-    android:versionCode="21"
-    android:versionName="1.12" >
+    android:versionCode="25"
+    android:versionName="1.16" >
 
     <uses-sdk
         android:minSdkVersion="19"
-        android:targetSdkVersion="23" />
+        android:targetSdkVersion="26" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -49,12 +49,6 @@
         <activity android:name=".activities.MyPreferenceActivity" >
         </activity>
         <activity android:name=".activities.AboutActivity" >
-        </activity>
-        <activity android:name=".activities.BulletinsActivity" >
-        </activity>
-        <activity android:name=".activities.BulletinsAreaActivity" >
-        </activity>
-        <activity android:name=".activities.BulletinsDetailsActivity" >
         </activity>
         <activity android:name=".activities.StandardDepartureActivity" >
         </activity>

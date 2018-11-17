@@ -1,8 +1,6 @@
 package com.sekakuoro.depart;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
+import java.security.cert.CertificateException;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.ThreadFactory;
@@ -13,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -28,6 +27,13 @@ import com.sekakuoro.depart.tracker.Hsl;
 import com.sekakuoro.depart.tracker.Tre;
 import com.sekakuoro.depart.tracker.Turku;
 import com.sekakuoro.depart.tracker.Vr;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -230,32 +236,85 @@ public class MyApp extends Application {
     return payload;
   }
 
+  private static OkHttpClient getUnsafeOkHttpClient() {
+    // Since this is not a very serious app, trusting all certificates etc. is fine.
+
+    try {
+      // Create a trust manager that does not validate certificate chains
+      final TrustManager[] trustAllCerts = new TrustManager[] {
+          new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+            }
+
+            @Override
+            public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
+            }
+
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+              return new java.security.cert.X509Certificate[]{};
+            }
+          }
+      };
+
+      // Install the all-trusting trust manager
+      final SSLContext sslContext = SSLContext.getInstance("SSL");
+      sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+      // Create an ssl socket factory with our all-trusting manager
+      final SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+
+      OkHttpClient.Builder builder = new OkHttpClient.Builder();
+      builder.sslSocketFactory(sslSocketFactory, (X509TrustManager)trustAllCerts[0]);
+      builder.hostnameVerifier(new HostnameVerifier() {
+        @Override
+        public boolean verify(String hostname, SSLSession session) {
+          return true;
+        }
+      });
+
+      return builder
+          .connectTimeout(30, TimeUnit.SECONDS)
+          .writeTimeout(30, TimeUnit.SECONDS)
+          .readTimeout(30, TimeUnit.SECONDS)
+          .build();
+    } catch (Exception e) {
+      Log.e("getUnsafeOkHttpClient", "exception", e);
+    }
+    return null;
+  }
+
   private static ResponseBody GetHttpFileResponse(final String url) {
     try {
-      OkHttpClient client = new OkHttpClient.Builder()
-              .connectTimeout(30, TimeUnit.SECONDS)
-              .writeTimeout(30, TimeUnit.SECONDS)
-              .readTimeout(30, TimeUnit.SECONDS)
-              .build();
+      OkHttpClient client = getUnsafeOkHttpClient();
+
+      if (client == null) {
+        return null;
+      }
 
       Request request = new Request.Builder().url(url).build();
 
       Response response = client.newCall(request).execute();
       return response.body();
     } catch (Exception e) {
+      Log.e("GetHttpFileResponse", url, e);
     }
 
     return null;
   }
 
   private static String GetHttpFile(final String url) {
+    Log.e("GetHttpFile", url);
     try {
       ResponseBody body = GetHttpFileResponse(url);
       if (body != null) {
           return body.string();
       }
     } catch (Exception e) {
+      Log.e("GetHttpFile exception", url, e);
     }
+
+    Log.e("GetHttpFile no response", url);
 
     return "";
   }
